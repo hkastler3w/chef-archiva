@@ -1,0 +1,16 @@
+# the server directive is nginx's virtual host directive
+#nginx_site_simple.erb
+server {
+	# port to listen on. Can also be set to an IP:PORT
+    listen <%=node['archiva']['nginx_port'] %>;
+	
+	# sets the domain[s] that this vhost server requests for
+	server_name <%= node['archiva']['web_domain'] %>;
+	
+    location <%=node['archiva']['nginx_uri'] %> {
+        proxy_pass http://<%= node['archiva']['web_host'] %>:<%= node['archiva']['web_port'] %>;
+    }
+	
+	error_log         <%= node['nginx']['log_dir'] %>/archiva-error.log;
+    access_log        <%= node['nginx']['log_dir'] %>/archiva-access.log;
+}
